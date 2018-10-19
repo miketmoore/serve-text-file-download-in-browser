@@ -1,0 +1,8 @@
+{
+  "name": "node-server-download-file-ui",
+  "version": "1.0.0",
+  "description": "Testing downloading a file via a UI",
+  "main": "index.js",
+  "author": "Michael Moore <miketmoore@gmail.com>",
+  "license": "MIT"
+}
