@@ -81,8 +81,17 @@ class App extends React.Component {
   private downloadFetchAndFileSaver = (method: "GET" | "POST") => {
     return async () => {
       let blob;
+      let filename = "default-filename.txt";
       try {
         const res = await fetch("/api/download", { method });
+
+        const contentDisposition = res.headers.get("content-disposition");
+        if (contentDisposition) {
+          filename = this.parseFilenameFromContentDispositionHeader(
+            contentDisposition
+          );
+        }
+
         blob = await res.blob();
       } catch (e) {
         console.error("error fetching file from server ", e);
@@ -90,12 +99,17 @@ class App extends React.Component {
 
       if (blob) {
         try {
-          saveAs(blob, "foo.txt");
+          saveAs(blob, filename);
         } catch (e) {
           console.error("error saving file");
         }
       }
     };
+  };
+
+  private parseFilenameFromContentDispositionHeader = (str: string) => {
+    str = str.slice('attachment; filename="'.length);
+    return str.slice(0, str.length - 1);
   };
 }
 
