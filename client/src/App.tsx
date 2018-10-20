@@ -58,13 +58,18 @@ class App extends React.Component {
         <p className="App-intro">
           To get started, edit <code>src/App.tsx</code> and save to reload.
         </p>
-        <button onClick={this.downloadWithDownloadjs}>
-          Download with downloadjs
-        </button>
-        <DownloadForm {...formData} />
-        <button onClick={this.downloadFetchAndFileSaver}>
-          Download with fetch and FileSaver
-        </button>
+        <div>
+          <button onClick={this.downloadWithDownloadjs}>
+            Download with downloadjs
+          </button>
+          <DownloadForm {...formData} />
+          <button onClick={this.downloadFetchAndFileSaver("GET")}>
+            Download with fetch and FileSaver (GET)
+          </button>
+          <button onClick={this.downloadFetchAndFileSaver("POST")}>
+            Download with fetch and FileSaver (POST)
+          </button>
+        </div>
       </div>
     );
   }
@@ -73,22 +78,24 @@ class App extends React.Component {
     download("/data/hello.txt", "dlText.txt", "text/plain");
   };
 
-  private downloadFetchAndFileSaver = async () => {
-    let blob;
-    try {
-      const res = await fetch("/api/download", { method: "GET" });
-      blob = await res.blob();
-    } catch (e) {
-      console.error("error fetching file from server ", e);
-    }
-
-    if (blob) {
+  private downloadFetchAndFileSaver = (method: "GET" | "POST") => {
+    return async () => {
+      let blob;
       try {
-        saveAs(blob, "foo.txt");
+        const res = await fetch("/api/download", { method });
+        blob = await res.blob();
       } catch (e) {
-        console.error("error saving file");
+        console.error("error fetching file from server ", e);
       }
-    }
+
+      if (blob) {
+        try {
+          saveAs(blob, "foo.txt");
+        } catch (e) {
+          console.error("error saving file");
+        }
+      }
+    };
   };
 }
 
