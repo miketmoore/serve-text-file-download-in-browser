@@ -1,7 +1,7 @@
 import * as download from "downloadjs";
+import { saveAs } from "file-saver";
 import * as React from "react";
 import "./App.css";
-
 import logo from "./logo.svg";
 /* tslint:disable:no-console */
 
@@ -58,13 +58,37 @@ class App extends React.Component {
         <p className="App-intro">
           To get started, edit <code>src/App.tsx</code> and save to reload.
         </p>
-        <button onClick={this.download}>Download with downloadjs</button>
+        <button onClick={this.downloadWithDownloadjs}>
+          Download with downloadjs
+        </button>
         <DownloadForm {...formData} />
+        <button onClick={this.downloadFetchAndFileSaver}>
+          Download with fetch and FileSaver
+        </button>
       </div>
     );
   }
-  private download = async () => {
+
+  private downloadWithDownloadjs = async () => {
     download("/data/hello.txt", "dlText.txt", "text/plain");
+  };
+
+  private downloadFetchAndFileSaver = async () => {
+    let blob;
+    try {
+      const res = await fetch("/api/download", { method: "GET" });
+      blob = await res.blob();
+    } catch (e) {
+      console.error("error fetching file from server ", e);
+    }
+
+    if (blob) {
+      try {
+        saveAs(blob, "foo.txt");
+      } catch (e) {
+        console.error("error saving file");
+      }
+    }
   };
 }
 

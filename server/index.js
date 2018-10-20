@@ -9,14 +9,12 @@ app.get("/api/json-data", (_, res) => {
   res.send(JSON.stringify({ a: 1 }));
 });
 
-app.get("/api/download", (_, res) => {
+const download = (_, res) => {
   var file = __dirname + "/data/hello.txt";
   res.download(file); // Set disposition and send it.
-});
+};
 
-app.post("/api/download", (_, res) => {
-  var file = __dirname + "/data/hello.txt";
-  res.download(file); // Set disposition and send it.
-});
+app.get("/api/download", download);
+app.post("/api/download", download);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
