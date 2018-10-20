@@ -1,9 +1,25 @@
-import * as React from 'react';
-import './App.css';
+import * as React from "react";
+import "./App.css";
 
-import logo from './logo.svg';
-
+import logo from "./logo.svg";
+/* tslint:disable:no-console */
 class App extends React.Component {
+  public async componentDidMount() {
+    let res;
+    try {
+      res = await fetch("/api/json-data", { method: "GET" });
+    } catch (e) {
+      console.log("error: ", e);
+    }
+
+    if (res) {
+      if (res.status >= 400) {
+        console.log(`error ${res.status}: `, res);
+      } else {
+        console.log("success: ", res);
+      }
+    }
+  }
   public render() {
     return (
       <div className="App">
