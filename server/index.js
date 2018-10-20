@@ -9,7 +9,7 @@ app.get("/api/json-data", (req, res) => {
   res.send(JSON.stringify({ a: 1 }));
 });
 
-app.get("/download", (req, res) => {
+app.get("/api/download", (req, res) => {
   var file = __dirname + "/data/hello.txt";
   res.download(file); // Set disposition and send it.
 });

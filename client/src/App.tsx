@@ -1,3 +1,4 @@
+import * as download from "downloadjs";
 import * as React from "react";
 import "./App.css";
 
@@ -30,9 +31,13 @@ class App extends React.Component {
         <p className="App-intro">
           To get started, edit <code>src/App.tsx</code> and save to reload.
         </p>
+        <button onClick={this.download}>Download</button>
       </div>
     );
   }
+  private download = async () => {
+    download("/data/hello.txt", "dlText.txt", "text/plain");
+  };
 }
 
 export default App;
